@@ -24,12 +24,20 @@ function App() {
     setAddress('');
   };
 
+  const removeAddress = (idx) => {
+    const addr = addressList[idx];
+    setAddressList(addressList.filter((address) => address != addr));
+  };
+
   return (
     <div className='App'>
       <Header />
       <div>
         {addressList.map((address, idx) => (
-          <div key={idx}>{address}</div>
+          <div key={idx}>
+            <div>{address}</div>
+            <button onClick={() => removeAddress(idx)}>➖</button>
+          </div>
         ))}
       </div>
       <form onSubmit={(e) => addAddress(e)}>

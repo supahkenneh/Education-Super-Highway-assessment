@@ -1,7 +1,7 @@
 export const Header = () => {
   return (
     <header>
-      <h1>Find The Coordinates</h1>
+      <h1>Coordinate Finder</h1>
     </header>
   );
 };
