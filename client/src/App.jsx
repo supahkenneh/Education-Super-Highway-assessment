@@ -26,7 +26,7 @@ function App() {
 
   const removeAddress = (idx) => {
     const addr = addressList[idx];
-    setAddressList(addressList.filter((address) => address != addr));
+    setAddressList(addressList.filter((address) => address !== addr));
   };
 
   return (

@@ -10,10 +10,6 @@ app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
-app.get('/', (req, res) => {
-    res.send('hello world');
-});
-
 app.post('/coordinates', async (req, res) => {
     const allResponses = await Promise.all(req.body.addresses.map(async address => {
         const responseData = await getCoordinates(address);
