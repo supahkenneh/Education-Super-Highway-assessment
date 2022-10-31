@@ -2,28 +2,45 @@ import './App.css';
 import { useState } from 'react';
 import { Input } from './Components/Input';
 import { Header } from './Components/Header';
-import { Result } from './Components/Result';
+import { ResultList } from './Components/ResultList';
 import axios from 'axios';
 
 function App() {
   const [address, setAddress] = useState('');
+  const [addressList, setAddressList] = useState([]);
   const [results, setResults] = useState('');
 
   const fetchCoordinates = async () => {
-    const fetchResponse = await axios.get(
-      `http://localhost:8888/coordinates/${address}`
+    const fetchResponse = await axios.post(
+      'http://localhost:8888/coordinates',
+      { addresses: addressList }
     );
     setResults(fetchResponse?.data);
+  };
+
+  const addAddress = (e) => {
+    e.preventDefault();
+    setAddressList([...addressList, address]);
+    setAddress('');
   };
 
   return (
     <div className='App'>
       <Header />
       <div>
-        <Input handleInput={(input) => setAddress(input)} />
-        <button onClick={() => fetchCoordinates()}>Get Coordinates</button>
+        {addressList.map((address, idx) => (
+          <div key={idx}>{address}</div>
+        ))}
       </div>
-      <Result searchData={results} />
+      <form onSubmit={(e) => addAddress(e)}>
+        <Input
+          handleInput={(input) => setAddress(input)}
+          inputValue={address}
+        />
+        <button onClick={(e) => addAddress(e)}>Add Address</button>
+      </form>
+      <button onClick={() => fetchCoordinates()}>Get Coordinates</button>
+      <ResultList searchData={results} />
     </div>
   );
 }
