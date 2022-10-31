@@ -6,9 +6,14 @@ import { ResultList } from './Components/ResultList';
 import axios from 'axios';
 
 function App() {
+  // individual address handled by input
   const [address, setAddress] = useState('');
+  // collection of addresses, updated via removing addresses or 'add address' button on client
   const [addressList, setAddressList] = useState([]);
+  // stores api payload data
   const [results, setResults] = useState('');
+  // basic error handling for invalid characters
+  const [errorToggle, setErrorToggle] = useState(false);
 
   const fetchCoordinates = async () => {
     const fetchResponse = await axios.post(
@@ -18,10 +23,60 @@ function App() {
     setResults(fetchResponse?.data);
   };
 
+  const addressHandler = (input) => {
+    if (!address.length || !input.length) {
+      setErrorToggle(false);
+    }
+    setAddress(input);
+  };
+
   const addAddress = (e) => {
     e.preventDefault();
-    setAddressList([...addressList, address]);
-    setAddress('');
+    if (!validateAddress(address)) {
+      setAddressList([...addressList, address]);
+      setAddress('');
+      if (errorToggle) setErrorToggle(false);
+    } else {
+      setErrorToggle(true);
+    }
+  };
+
+  const validateAddress = (address) => {
+    const invalidChars = [
+      '!',
+      '@',
+      '$',
+      '%',
+      '^',
+      '&',
+      '*',
+      '(',
+      ')',
+      '_',
+      '+',
+      '=',
+      '{',
+      '}',
+      '[',
+      ']',
+      ':',
+      ';',
+      '"',
+      '<',
+      '>',
+      '/',
+      '?',
+    ];
+
+    const invalidCharsExist = invalidChars.every((char) => {
+      if (address.includes(char)) return false;
+      return true;
+    });
+
+    if (invalidCharsExist) {
+      return false;
+    }
+    return true;
   };
 
   const removeAddress = (idx) => {
@@ -31,15 +86,21 @@ function App() {
   return (
     <div className='App h-screen bg-gradient-to-r from-turqoise to-soft-green'>
       <Header />
+      {errorToggle ? (
+        <p className='text-red-600 text-xs flex pl-10 my-2'>
+          Address has invalid characters
+        </p>
+      ) : (
+        <></>
+      )}
       <div className='flex pl-10 w-screen my-2'>
-        <form
-          onSubmit={(e) => addAddress(e)}
-          className='w-1/3 flex justify-between'
-        >
-          <Input
-            handleInput={(input) => setAddress(input)}
-            inputValue={address}
-          />
+        <form onSubmit={(e) => addAddress(e)} className='flex justify-between'>
+          <div className='w-1/3'>
+            <Input
+              handleInput={(input) => addressHandler(input)}
+              inputValue={address}
+            />
+          </div>
           <button className='btn-primary' onClick={(e) => addAddress(e)}>
             Add Address
           </button>
