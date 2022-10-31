@@ -27,12 +27,11 @@ function App() {
     if (!address.length || !input.length) {
       setErrorToggle(false);
     }
-    setAddress(input);
   };
 
   const addAddress = (e) => {
     e.preventDefault();
-    if (!validateAddress(address)) {
+    if (!validateAddress(address) && address.length > 0) {
       setAddressList([...addressList, address]);
       setAddress('');
       if (errorToggle) setErrorToggle(false);
@@ -88,7 +87,7 @@ function App() {
       <Header />
       {errorToggle ? (
         <p className='text-red-600 text-xs flex pl-10 my-2'>
-          Address has invalid characters
+          Invalid address
         </p>
       ) : (
         <></>

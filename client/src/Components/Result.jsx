@@ -1,6 +1,6 @@
 export const Result = ({ result }) => {
-  const [longitude, latitude] = result.features[0].center;
-  const address = result.features[0].place_name;
+  const [longitude, latitude] = result?.features[0]?.center;
+  const address = result?.features[0]?.place_name;
 
   return (
     <div className='bg-slate-50 p-7 rounded-md shadow-lg w-1/4 mr-3 my-3'>

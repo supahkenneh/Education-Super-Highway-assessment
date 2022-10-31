@@ -14,8 +14,8 @@ app.use(bodyParser.json());
 app.post('/coordinates', async (req, res) => {
     const allResponses = await Promise.all(req.body.addresses.map(async address => {
         const responseData = await getCoordinates(address);
-        if (responseData?.data) responseData.data;
-        else res.send({ error: true });
+        if (responseData?.data) return responseData.data;
+        else return { error: true }
     }));
     res.send(allResponses);
 })
